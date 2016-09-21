@@ -10,6 +10,17 @@ import matplotlib.pylab as plt
 
 plt.ion()
 
+# Um ein Spiel zu starten:
+#
+#game = ConnectFour(1, -1),     1 = Player 1, -1 = Player 2
+#
+#Diese Funktion ist zum Spielen, in ne Loop bringen
+#game.play(col, playernr),      col = Säule, wo der Disc platziert wird, playernr: 1 -> Player1, 2-> Player2 (NICHT -1)
+#
+#Wenn Spiel zu Ende ist:
+#game.newGame()
+#
+#
 
 class ConnectFour():
     
@@ -21,12 +32,15 @@ class ConnectFour():
         self.p[2] = player2
         self.turn = True
         self.plot = plot
+        self.nTurns = 0
         if plot == True:
             self.window = plt.imshow(self.game[0], cmap='Greys_r', interpolation = 'none', origin='lower')
 
     def newGame(self, gameNr = 0):
         self.game[gameNr] = np.zeros((7,7))
-        
+        self.turn = True
+        self.nTurns = 0
+
     def dropDisc(self, col, player, gameNr = 0):
         height = self.getLegitRow(col, gameNr)
         
@@ -58,8 +72,10 @@ class ConnectFour():
         
         return legitRow
 
+
     def placeDisc(self, col, row, player, gameNr = 0):
         self.game[gameNr][row][col] =  player     
+        self.nTurns += 1
         
     def checkWin(self, player, gameNr = 0):
         filtered = [[cell == player for cell in row] for row in self.game[gameNr]]
@@ -123,11 +139,13 @@ class ConnectFour():
             return 2
     
     def play(self, col, playerNr, gameNr = 0):
+        # return -1 = Eingabe wurde nicht angenommen --> siehe Konsole
+        # return 0 = Spiel geht ohne besonders Ereignis weiter
+        # return -2 = Unentschieden
+        # return 1/2 = Spieler 1/2 gewinnt
         if playerNr != self.getTurn():
             print 'Wrong player played.'
             return -1
-
-
 
         if col < 0:
             print 'Only use colloumns from 0 to 6.'
@@ -144,6 +162,9 @@ class ConnectFour():
             print 'Player {} won!'.format(playerNr)
             return playerNr                
                 
+        if self.nTurns == 42:
+            return -2
+        
             self.changeTurn()
             
         return 0
