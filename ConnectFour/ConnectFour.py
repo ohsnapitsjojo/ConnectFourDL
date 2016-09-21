@@ -20,7 +20,8 @@ plt.ion()
 #Wenn Spiel zu Ende ist:
 #game.newGame()
 #
-#
+#Um den State abzufragen:
+#game.getGame()
 
 class ConnectFour():
     
