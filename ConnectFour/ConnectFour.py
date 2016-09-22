@@ -160,7 +160,7 @@ class ConnectFour():
 
         win = self.checkWin(self.p[playerNr])
         if win == True:
-            print 'Player {} won!'.format(playerNr)
+            #print 'Player {} won!'.format(playerNr)
             return playerNr                
                 
         if self.nTurns == 42:
