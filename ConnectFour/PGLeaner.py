@@ -76,7 +76,7 @@ class PGLearner:
         self.x2 = np.zeros((1,4,7,7),np.int8)
         
     def checkGameEnd(self, inp):
-        if inp == 1 or inp == 2 or inp == -2:
+        if inp == 1 or inp == 2 or inp == 3:
             return True
         else:
             return False
@@ -88,8 +88,13 @@ class PGLearner:
             while True:
                 nextX = self.game.getGame()
                 self.updateInputs(nextX)
+                print self.x1
+                
                 action = self.agent.getDeterministicAction(self.x1)
                 state = self.game.play(action, 1)
+                
+                if state == -2:
+                    break
             
                 game_end = self.checkGameEnd(state)
                 
@@ -98,6 +103,7 @@ class PGLearner:
                 else:
                     nextX = self.game.getGame()
                     self.updateInputs(nextX)
+                    print self.x2
                     action = self.agent.getDeterministicAction(self.x2)
                     state = self.game.play(action, 2)
                 
@@ -133,36 +139,44 @@ class PGLearner:
                 while True:
                     # Get game state and update the input of both x
                     self.updateInputs(self.game.getGame())
-                    
                     # Get and perform action
-                    action = self.agent.getNonDeterministicAction(self.x1)
-                    state = self.game.play(action, self.game.getTurn())
+                    state = -2
+                    while state == -2:
+                        action = self.agent.getNonDeterministicAction(self.x1)
+                        state = self.game.play(action, self.game.getTurn())
+                    
+                        # Append state1 and his action to a list
+                        x_n1.append(self.x1)
+                        a_n1.append(action)
+                        if state == -2:
+                            r_n1.append(-0.3)
+                        else:
+                            r_n1.append(0)
                     
                     # Check if the game ended
-                    game_end = self.checkGameEnd(state)                
-                    
-                    # Append state1 and his action to a list
-                    x_n1.append(self.x1)
-                    a_n1.append(action)
-                    r_n1.append(0)
+                    game_end = self.checkGameEnd(state)      
                     
                     if game_end == True:
                         break
                     else:
                         # Get game state and update the input of both x
                         self.updateInputs(self.game.getGame())
-                        
                         # Get and perform action
-                        action = self.agent.getNonDeterministicAction(self.x2)
-                        state = self.game.play(action, self.game.getTurn())
+                        state = -2
+                        while state == -2:
+                            action = self.agent.getNonDeterministicAction(self.x2)
+                            state = self.game.play(action, self.game.getTurn())
                         
+                            # Append state2 and his action to a list
+                            x_n2.append(self.x2)
+                            a_n2.append(action)
+                            if state == -2:
+                                r_n2.append(-0.3)
+                            else:
+                                r_n2.append(0)
+                            
                         # Check if the game ended
                         game_end = self.checkGameEnd(state)
-                        
-                        # Append state2 and his action to a list
-                        x_n2.append(self.x2)
-                        a_n2.append(action)
-                        r_n2.append(0)
                         
                         if game_end == True:
                             break
@@ -219,7 +233,7 @@ class PGLearner:
             self.evaluate(evalSize, t, epo, epochs)
                     
         print("Saving Model to File...")
-        self.agent.saveParams('trained_model1.npz')
+        self.agent.saveParams('trained_model1.npz', 'dummy1.npz')
         print("End Training Program!")
             
     def discount_rewards(self, r):
