@@ -110,6 +110,8 @@ class ConnectFour():
             for _ in range(i+1):
                 if game[col][row] == True:
                     flag += 1
+                else:
+                    flag = 0
                 col -= 1
                 row += 1
                 
@@ -124,6 +126,8 @@ class ConnectFour():
             for cell in row:
                if cell == True:
                    flag += 1
+               else:
+                   flag = 0
                    
             if flag > 3:
                 return True
@@ -158,7 +162,9 @@ class ConnectFour():
             print 'Only use colloumns from 0 to 6.'
             return -1
         
-        self.dropDisc(col, self.p[playerNr], gameNr)
+        legal = self.dropDisc(col, self.p[playerNr], gameNr)
+        if legal == -1:
+            return -2
 
         win = self.checkWin(self.p[playerNr])
         if win == True:
