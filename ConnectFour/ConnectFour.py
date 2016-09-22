@@ -34,8 +34,6 @@ class ConnectFour():
         self.turn = True
         self.plot = plot
         self.nTurns = 0
-        if plot == True:
-            self.window = plt.imshow(self.game[0], cmap='Greys_r', interpolation = 'none', origin='lower')
 
     def newGame(self, gameNr = 0):
         self.game[gameNr] = np.zeros((7,7))
@@ -115,8 +113,8 @@ class ConnectFour():
                 col -= 1
                 row += 1
                 
-            if flag > 3:
-                return True
+                if flag > 3:
+                    return True
             
         return False
         
@@ -129,9 +127,9 @@ class ConnectFour():
                else:
                    flag = 0
                    
-            if flag > 3:
-                return True
-            
+               if flag > 3:
+                   return True
+
         return False        
                        
     def changeTurn(self):
@@ -179,9 +177,7 @@ class ConnectFour():
         return 0
     
     def updateScreen(self, gameNr = 0):
-        self.window.set_data(self.game[gameNr])
-        plt.draw()
-        plt.pause(0.1)
+        print self.getGame()
 
     def manualGameMode(self):
         end = False
@@ -195,5 +191,5 @@ class ConnectFour():
             if self.plot == True:
                 self.updateScreen()
     
-#game = ConnectFour(1, 2, plot = False)
-#game.manualGameMode()
+game = ConnectFour(1, 2, plot = True)
+game.manualGameMode()
