@@ -142,8 +142,9 @@ class ConnectFour():
     def play(self, col, playerNr, gameNr = 0):
         # return -1 = Eingabe wurde nicht angenommen --> siehe Konsole
         # return 0 = Spiel geht ohne besonders Ereignis weiter
-        # return -2 = Unentschieden
         # return 1/2 = Spieler 1/2 gewinnt
+        # return -2 = falsch gelegter Disc
+    
         if playerNr != self.getTurn():
             print 'Wrong player played.'
             return -1
@@ -164,7 +165,7 @@ class ConnectFour():
             return playerNr                
                 
         if self.nTurns == 42:
-            return -2
+            return 3
         
         self.changeTurn()
             
