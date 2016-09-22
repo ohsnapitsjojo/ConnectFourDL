@@ -166,7 +166,7 @@ class ConnectFour():
         if self.nTurns == 42:
             return -2
         
-            self.changeTurn()
+        self.changeTurn()
             
         return 0
     
@@ -189,5 +189,3 @@ class ConnectFour():
     
 #game = ConnectFour(1, 2, plot = False)
 #game.manualGameMode()
-
-
